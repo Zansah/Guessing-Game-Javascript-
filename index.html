@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guessing Game</title>
+    <style>
+        body{
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-box{
+            width: 400px;
+            height: 600px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px gray;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .inner-header{
+            width: 100%;
+            height: 400px;
+            background-color: #3070D4;
+            border-bottom-right-radius: 40px;
+            border-bottom-left-radius: 40px;
+            border-top-right-radius: 15px;
+            border-top-left-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+        }
+
+        #computer-guess {
+            font-size: 80px;
+            color: white;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #guesses{
+            font-size: 18px;
+            color: white;
+            border-radius: 10px;
+            border: solid 1px white;
+            text-align: start;
+            width: 60%;
+            margin: 20px auto;
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 10px;
+            position: relative;
+            z-index: 10;
+            bottom: -5%;
+        }
+
+        #content-container{
+            margin-top: 20px;
+            font-size: 20px;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+            position: relative;
+            z-index: 10;
+            bottom: -28%;
+        }
+
+        input[type="text"] {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            border-radius: 5px;
+            border: 1px solid #3070D4;
+            text-align: start;
+            color: #3070D4;
+            position: relative;
+            z-index: 10;
+            bottom: -33%;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="main-box">
+        <div class="inner-header">
+            <div id="computer-guess">0</div>
+            <div id="guesses">Guesses: </div>
+        </div>
+        <div id="content-container">Guess a number between 1-100</div>
+        <input type="text" id="user-input" placeholder="Your guess">
+    </div>
+
+    <script>
+        let randomNumber = Math.floor(Math.random() * 100) + 1;
+        let guesses = 0;
+        let previousGuesses = [];
+
+        function checkGuess() {
+            let userInput = parseInt(document.getElementById("user-input").value);
+            let computerGuessElement = document.getElementById("computer-guess");
+            let guessesElement = document.getElementById("guesses");
+            let contentContainer = document.getElementById("content-container");
+
+            if (isNaN(userInput) || userInput < 1 || userInput > 100) {
+                contentContainer.innerText = "Please enter a valid number between 1 and 100.";
+                return;
+            }
+
+            guesses++;
+            previousGuesses.push(userInput);
+            guessesElement.innerText = "Guesses: " + previousGuesses.join(", ");
+
+            if (userInput === randomNumber) {
+                computerGuessElement.innerText = "" + randomNumber;
+                contentContainer.innerText = "Congratulations! You guessed the correct number!";
+            } else {
+                computerGuessElement.innerText = "WRONG!";
+                let difference = Math.abs(randomNumber - userInput);
+
+                if (difference <= 5) {
+                    contentContainer.innerText = "You're very hot!";
+                } else if (difference <= 15) {
+                    contentContainer.innerText = "You're warm.";
+                } else {
+                    contentContainer.innerText = "You're cold.";
+                }
+            }
+
+            document.getElementById("user-input").value = ""; 
+        }
+
+        document.getElementById("user-input").addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                checkGuess();
+            }
+        });
+        
+    </script>
+</body>
+</html>
